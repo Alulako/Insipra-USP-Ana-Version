@@ -2,14 +2,14 @@ import time
 from fastapi import FastAPI
 from sqlalchemy import text
 from .db import engine, Base
-from . import models  # noqa: F401 (só pra registrar as tabelas)
+from . import models  # noqa: F401
+from .routers import auth, users, courses
 
 app = FastAPI(title="InspiraUSP MVP")
 
 @app.on_event("startup")
 def startup():
-    # espera o MariaDB ficar pronto
-    for i in range(30):  # ~30s
+    for _ in range(30):
         try:
             with engine.connect() as conn:
                 conn.execute(text("SELECT 1"))
@@ -20,6 +20,10 @@ def startup():
         raise RuntimeError("DB não ficou pronto a tempo")
 
     Base.metadata.create_all(bind=engine)
+
+app.include_router(auth.router)
+app.include_router(users.router)
+app.include_router(courses.router)
 
 @app.get("/")
 def root():
