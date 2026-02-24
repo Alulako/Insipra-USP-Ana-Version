@@ -1,0 +1,15 @@
+# Ignora pastas de cache de bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignora ambientes virtuais (também essencial!)
+venv/
+.venv/
+env/
+
+# Ignora pastas de build/distribuição
+build/
+dist/
+*.egg-info/ 
